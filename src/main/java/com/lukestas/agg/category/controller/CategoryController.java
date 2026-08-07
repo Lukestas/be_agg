@@ -40,18 +40,18 @@ public class CategoryController {
         return ResponseEntity.ok(categories);
     }
 
-    @GetMapping("/${categoryId}")
+    @GetMapping("/{categoryId}")
     public ResponseEntity<?> getCategoryById(@PathVariable Integer categoryId) {
         Optional<Category> category = categoryService.getCategoryById(categoryId);
         return category.isPresent() ? ResponseEntity.ok(category) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{categoryId}")
     public ResponseEntity<?> updateCategory(@PathVariable Integer categoryId, @RequestBody Category entity) {
         return ResponseEntity.ok(categoryService.updateCategory(categoryId, entity));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{categoryId}")
     public ResponseEntity<?> deleteCategory(@PathVariable Integer categoryId) {
         try {
             categoryService.deleteCategory(categoryId);
