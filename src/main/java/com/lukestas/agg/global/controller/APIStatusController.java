@@ -1,4 +1,4 @@
-package com.lukestas.agg.controller;
+package com.lukestas.agg.global.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
