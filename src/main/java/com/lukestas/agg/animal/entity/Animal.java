@@ -19,23 +19,23 @@ public class Animal {
         @Column(name = "animal_id")
         private Integer animalId;
 
-        @Column(name = "scientific_name", nullable = false, unique = true)
+        @Column(name = "scientific_name", nullable = false, unique = true, columnDefinition = "TEXT")
         private String scientificName;
 
-        @Column(name = "popular_name")
+        @Column(name = "popular_name", columnDefinition = "TEXT")
         private String popularName;
 
         @ManyToOne
         @JoinColumn(name = "category_id", nullable = false)
         private Category category;
 
-        @Column(name = "description")
+        @Column(name = "description", columnDefinition = "TEXT")
         private String description;
 
-        @Column(name = "diet")
+        @Column(name = "diet", columnDefinition = "TEXT")
         private String diet;
 
-        @Column(name = "image_url")
+        @Column(name = "image_url", columnDefinition = "TEXT")
         private String imageUrl;
 
         @Column(name = "is_extinct", nullable = false)

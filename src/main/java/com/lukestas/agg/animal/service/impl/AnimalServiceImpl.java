@@ -9,9 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.lukestas.agg.animal.DTO.AnimalDTOResponse;
 import com.lukestas.agg.animal.entity.Animal;
 import com.lukestas.agg.animal.repository.AnimalRepository;
 import com.lukestas.agg.animal.service.AnimalService;
+import com.lukestas.agg.category.DTO.CategoryDTO;
 import com.lukestas.agg.category.entity.Category;
 import com.lukestas.agg.category.repository.CategoryRepository;
 
@@ -42,18 +44,45 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public Page<Animal> getAllAnimals(Boolean isExtinct, String popularName, String scientificName, Integer category,
+    public Page<AnimalDTOResponse> getAllAnimals(Boolean isExtinct,
+            String popularName,
+            String scientificName, Integer category,
             Integer page, Integer totalPerPage) {
         Pageable pageable = PageRequest.of(
                 page,
                 totalPerPage,
                 Sort.by("popularName").ascending());
-        return animalRepository.findAnimals(isExtinct, popularName, scientificName, category, pageable);
+
+        Page<Animal> animals = animalRepository.findAnimals(isExtinct, popularName, scientificName, category, pageable);
+        return animals.map(animal -> new AnimalDTOResponse(
+                animal.getAnimalId(),
+                new CategoryDTO(animal.getCategory().getCategoryId(),
+                        animal.getCategory().getCategoryName()),
+                animal.getCreatedAt(),
+                animal.getUpdatedAt(),
+                animal.getDescription(),
+                animal.getDiet(),
+                animal.getImageUrl(),
+                animal.getIsExtinct(),
+                animal.getPopularName(),
+                animal.getScientificName()));
     }
 
     @Override
-    public Optional<Animal> getByAnimalId(Integer animalId) {
-        return animalRepository.findById(animalId);
+    public Optional<AnimalDTOResponse> getByAnimalId(Integer animalId) {
+        Optional<Animal> animalFound = animalRepository.findById(animalId);
+        return animalFound.map(animal -> new AnimalDTOResponse(
+                animal.getAnimalId(),
+                new CategoryDTO(animal.getCategory().getCategoryId(),
+                        animal.getCategory().getCategoryName()),
+                animal.getCreatedAt(),
+                animal.getUpdatedAt(),
+                animal.getDescription(),
+                animal.getDiet(),
+                animal.getImageUrl(),
+                animal.getIsExtinct(),
+                animal.getPopularName(),
+                animal.getScientificName()));
     }
 
     @Override

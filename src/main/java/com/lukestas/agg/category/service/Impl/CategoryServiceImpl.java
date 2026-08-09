@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.lukestas.agg.category.DTO.CategoryDTO;
 import com.lukestas.agg.category.entity.Category;
 import com.lukestas.agg.category.repository.CategoryRepository;
 import com.lukestas.agg.category.service.CategoryService;
@@ -28,13 +29,16 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public List<CategoryDTO> getAllCategories() {
+        List<Category> categories = categoryRepository.findAll();
+        return categories.stream()
+                .map(category -> new CategoryDTO(category.getCategoryId(), category.getCategoryName())).toList();
     }
 
     @Override
-    public Optional<Category> getCategoryById(Integer categoryId) {
-        return categoryRepository.findById(categoryId);
+    public Optional<CategoryDTO> getCategoryById(Integer categoryId) {
+        Optional<Category> categoryFound = categoryRepository.findById(categoryId);
+        return categoryFound.map(category -> new CategoryDTO(category.getCategoryId(), category.getCategoryName()));
     }
 
     @Override

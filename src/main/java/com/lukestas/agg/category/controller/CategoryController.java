@@ -3,6 +3,7 @@ package com.lukestas.agg.category.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lukestas.agg.category.DTO.CategoryDTO;
 import com.lukestas.agg.category.entity.Category;
 import com.lukestas.agg.category.service.CategoryService;
 
@@ -35,14 +36,14 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Category>> getAllCategories() {
-        List<Category> categories = categoryService.getAllCategories();
+    public ResponseEntity<List<CategoryDTO>> getAllCategories() {
+        List<CategoryDTO> categories = categoryService.getAllCategories();
         return ResponseEntity.ok(categories);
     }
 
     @GetMapping("/{categoryId}")
     public ResponseEntity<?> getCategoryById(@PathVariable Integer categoryId) {
-        Optional<Category> category = categoryService.getCategoryById(categoryId);
+        Optional<CategoryDTO> category = categoryService.getCategoryById(categoryId);
         return category.isPresent() ? ResponseEntity.ok(category) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 

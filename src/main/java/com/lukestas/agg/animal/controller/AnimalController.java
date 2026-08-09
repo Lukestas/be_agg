@@ -2,6 +2,7 @@ package com.lukestas.agg.animal.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lukestas.agg.animal.DTO.AnimalDTOResponse;
 import com.lukestas.agg.animal.entity.Animal;
 import com.lukestas.agg.animal.service.AnimalService;
 
@@ -36,14 +37,15 @@ public class AnimalController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Animal>> getAllAnimals(
+    public ResponseEntity<Page<AnimalDTOResponse>> getAllAnimals(
             @RequestParam(required = false) Boolean isExtinct,
             @RequestParam(required = false) String popularName,
             @RequestParam(required = false) String scientificName,
             @RequestParam(required = false) Integer category,
             @RequestParam(required = false, defaultValue = "0") Integer page,
             @RequestParam(required = false, defaultValue = "10") Integer totalPerPage) {
-        Page<Animal> animalsFound = animalService.getAllAnimals(isExtinct, popularName, scientificName, category, page,
+        Page<AnimalDTOResponse> animalsFound = animalService.getAllAnimals(isExtinct, popularName, scientificName,
+                category, page,
                 totalPerPage);
 
         return ResponseEntity.ok(animalsFound);
@@ -51,7 +53,7 @@ public class AnimalController {
 
     @GetMapping("/{animalId}")
     public ResponseEntity<?> getAnimalById(@PathVariable Integer animalId) {
-        Optional<Animal> animalFound = animalService.getByAnimalId(animalId);
+        Optional<AnimalDTOResponse> animalFound = animalService.getByAnimalId(animalId);
         return animalFound.isPresent() ? ResponseEntity.ok(animalFound.get())
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).body("Animal no encontrado");
     }
