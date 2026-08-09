@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lukestas.agg.animal.entity.Animal;
 import com.lukestas.agg.animal.service.AnimalService;
 
-import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
@@ -35,8 +36,15 @@ public class AnimalController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Animal>> getAllAnimals() {
-        List<Animal> animalsFound = animalService.getAllAnimals();
+    public ResponseEntity<Page<Animal>> getAllAnimals(
+            @RequestParam(required = false) Boolean isExtinct,
+            @RequestParam(required = false) String popularName,
+            @RequestParam(required = false) String scientificName,
+            @RequestParam(required = false) Integer category,
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "10") Integer totalPerPage) {
+        Page<Animal> animalsFound = animalService.getAllAnimals(isExtinct, popularName, scientificName, category, page,
+                totalPerPage);
 
         return ResponseEntity.ok(animalsFound);
     }

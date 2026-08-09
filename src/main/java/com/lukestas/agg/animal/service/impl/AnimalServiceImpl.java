@@ -1,38 +1,54 @@
 package com.lukestas.agg.animal.service.impl;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.lukestas.agg.animal.entity.Animal;
 import com.lukestas.agg.animal.repository.AnimalRepository;
 import com.lukestas.agg.animal.service.AnimalService;
+import com.lukestas.agg.category.entity.Category;
+import com.lukestas.agg.category.repository.CategoryRepository;
 
 @Service
 public class AnimalServiceImpl implements AnimalService {
 
     private AnimalRepository animalRepository;
+    private CategoryRepository categoryRepository;
 
-    public AnimalServiceImpl(AnimalRepository animalRepository) {
+    public AnimalServiceImpl(AnimalRepository animalRepository, CategoryRepository categoryRepository) {
         this.animalRepository = animalRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
     public Animal saveNewAnimal(Animal animal) {
         LocalDateTime now = LocalDateTime.now();
-
+        System.out.println(animal.getCategory());
+        Category category = categoryRepository.findById(
+                animal.getCategory().getCategoryId()).orElseThrow(
+                        () -> new RuntimeException(
+                                "Category ID " + animal.getCategory().getCategoryId() + " not found"));
         animal.setCreatedAt(now);
         animal.setUpdatedAt(now);
+        animal.setCategory(category);
 
         return animalRepository.save(animal);
     }
 
     @Override
-    public List<Animal> getAllAnimals() {
-        return animalRepository.findAll(Sort.by(Sort.Direction.DESC, "popularName"));
+    public Page<Animal> getAllAnimals(Boolean isExtinct, String popularName, String scientificName, Integer category,
+            Integer page, Integer totalPerPage) {
+        Pageable pageable = PageRequest.of(
+                page,
+                totalPerPage,
+                Sort.by("popularName").ascending());
+        return animalRepository.findAnimals(isExtinct, popularName, scientificName, category, pageable);
     }
 
     @Override
@@ -45,7 +61,14 @@ public class AnimalServiceImpl implements AnimalService {
         Animal animalFound = animalRepository.findById(animalId)
                 .orElseThrow(() -> new RuntimeException("Animal ID " + animalId + " not found"));
 
-        animalFound.setCategoryId(animal.getCategoryId());
+        Category category = categoryRepository.findById(
+                animal.getCategory().getCategoryId()).orElseThrow(
+                        () -> new RuntimeException(
+                                "Category ID " +
+                                        animal.getCategory().getCategoryId() +
+                                        " not found"));
+
+        animalFound.setCategory(category);
         animalFound.setScientificName(animal.getScientificName());
         animalFound.setPopularName(animal.getPopularName());
         animalFound.setDescription(animal.getDescription());

@@ -3,6 +3,7 @@ package com.lukestas.agg.animal.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.lukestas.agg.animal.entity.Animal;
@@ -25,7 +26,8 @@ public interface AnimalService {
      * @return One or a list of animals
      */
 
-    List<Animal> getAllAnimals();
+    Page<Animal> getAllAnimals(Boolean isExtinct, String popularName, String scientificName, Integer category,
+            Integer page, Integer totalPerPage);
 
     Optional<Animal> getByAnimalId(Integer animalId);
 

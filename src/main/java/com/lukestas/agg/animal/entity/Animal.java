@@ -2,11 +2,15 @@ package com.lukestas.agg.animal.entity;
 
 import java.time.LocalDateTime;
 
+import com.lukestas.agg.category.entity.Category;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Animal {
@@ -21,8 +25,9 @@ public class Animal {
         @Column(name = "popular_name")
         private String popularName;
 
-        @Column(name = "category_Id", nullable = false)
-        private Integer categoryId;
+        @ManyToOne
+        @JoinColumn(name = "category_id", nullable = false)
+        private Category category;
 
         @Column(name = "description")
         private String description;
@@ -62,12 +67,12 @@ public class Animal {
                 this.popularName = popularName;
         }
 
-        public Integer getCategoryId() {
-                return categoryId;
+        public Category getCategory() {
+                return category;
         }
 
-        public void setCategoryId(Integer categoryId) {
-                this.categoryId = categoryId;
+        public void setCategory(Category category) {
+                this.category = category;
         }
 
         public String getDescription() {
