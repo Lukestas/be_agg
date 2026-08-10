@@ -15,7 +15,7 @@ public interface CategoryService {
 
     List<CategoryDTO> getAllCategories();
 
-    Optional<CategoryDTO> getCategoryById(Integer categoryId);
+    CategoryDTO getCategoryById(Integer categoryId);
 
     Category updateCategory(Integer categoryId, Category category);
 

@@ -2,7 +2,6 @@ package com.lukestas.agg.category.service.Impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -10,6 +9,7 @@ import com.lukestas.agg.category.DTO.CategoryDTO;
 import com.lukestas.agg.category.entity.Category;
 import com.lukestas.agg.category.repository.CategoryRepository;
 import com.lukestas.agg.category.service.CategoryService;
+import com.lukestas.agg.global.exception.ResourceNotFoundException;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -36,9 +36,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Optional<CategoryDTO> getCategoryById(Integer categoryId) {
-        Optional<Category> categoryFound = categoryRepository.findById(categoryId);
-        return categoryFound.map(category -> new CategoryDTO(category.getCategoryId(), category.getCategoryName()));
+    public CategoryDTO getCategoryById(Integer categoryId) {
+        Category categoryFound = categoryRepository.findById(categoryId).orElseThrow(() -> {
+            throw new ResourceNotFoundException("Category ID " + categoryId + " not found");
+        });
+        return new CategoryDTO(categoryFound.getCategoryId(), categoryFound.getCategoryName());
     }
 
     @Override

@@ -8,7 +8,6 @@ import com.lukestas.agg.category.entity.Category;
 import com.lukestas.agg.category.service.CategoryService;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,8 +42,8 @@ public class CategoryController {
 
     @GetMapping("/{categoryId}")
     public ResponseEntity<?> getCategoryById(@PathVariable Integer categoryId) {
-        Optional<CategoryDTO> category = categoryService.getCategoryById(categoryId);
-        return category.isPresent() ? ResponseEntity.ok(category) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        CategoryDTO category = categoryService.getCategoryById(categoryId);
+        return ResponseEntity.ok(category);
     }
 
     @PutMapping("/{categoryId}")

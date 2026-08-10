@@ -6,8 +6,6 @@ import com.lukestas.agg.animal.DTO.AnimalDTOResponse;
 import com.lukestas.agg.animal.entity.Animal;
 import com.lukestas.agg.animal.service.AnimalService;
 
-import java.util.Optional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,9 +51,9 @@ public class AnimalController {
 
     @GetMapping("/{animalId}")
     public ResponseEntity<?> getAnimalById(@PathVariable Integer animalId) {
-        Optional<AnimalDTOResponse> animalFound = animalService.getByAnimalId(animalId);
-        return animalFound.isPresent() ? ResponseEntity.ok(animalFound.get())
-                : ResponseEntity.status(HttpStatus.NOT_FOUND).body("Animal no encontrado");
+        AnimalDTOResponse animalFound = animalService.getByAnimalId(animalId);
+        return ResponseEntity.ok(animalFound);
+
     }
 
     @PutMapping("/{animalId}")

@@ -1,7 +1,5 @@
 package com.lukestas.agg.animal.service;
 
-import java.util.Optional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +29,7 @@ public interface AnimalService {
             String scientificName, Integer category,
             Integer page, Integer totalPerPage);
 
-    Optional<AnimalDTOResponse> getByAnimalId(Integer animalId);
+    AnimalDTOResponse getByAnimalId(Integer animalId);
 
     /**
      * Update Animal data
